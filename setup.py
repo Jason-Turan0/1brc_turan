@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
-with open('ants_ai/README.rst') as f:
+with open('README.md') as f:
     readme = f.read()
-with open('ants_ai/LICENSE') as f:
+with open('LICENSE') as f:
     module_license = f.read()
 
 setup(

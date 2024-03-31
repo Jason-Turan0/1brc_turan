@@ -4,7 +4,7 @@ import os
 @task
 def run(context):
     context.run(f'python main.py')
-
+ 
 @task
 def chunk(context):
     context.run(f'python chunk_file.py')
@@ -15,4 +15,4 @@ def test(context):
 
 @task
 def start_profiler(context):
-    context.run('snakeviz ants_example.profile')
+    context.run('snakeviz 1brc_turan_0.profile')

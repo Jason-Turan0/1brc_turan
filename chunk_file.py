@@ -2,6 +2,7 @@ import os
 import multiprocessing
 from collections import namedtuple
 
+
 FileIndex = namedtuple('FileIndex', ['start_index', 'end_index'])
 
 def chunk_file(file_path, num_chunks):    

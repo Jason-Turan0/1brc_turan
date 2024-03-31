@@ -5,6 +5,9 @@ import os
 def run(context):
     context.run(f'python main.py')
 
+@task
+def chunk(context):
+    context.run(f'python chunk_file.py')
 
 @task
 def test(context):

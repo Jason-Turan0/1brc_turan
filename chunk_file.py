@@ -4,7 +4,7 @@ from collections import namedtuple
 
 
 FileIndex = namedtuple('FileIndex', ['start_index', 'end_index'])
-
+newline_char = os.linesep
 def chunk_file(file_path, num_chunks):    
     chunk_indexes = []
     current_chunk_index = 0
@@ -17,7 +17,7 @@ def chunk_file(file_path, num_chunks):
             file.seek(current_chunk_index + chunk_size)
             buffer = file.read(128)
             
-            first_newline_index = buffer.find(b'\n')
+            first_newline_index = buffer.find(newline_char.encode('utf-8'))
             #print(buffer.decode('utf8'))
             current_end_index = current_chunk_index + chunk_size + first_newline_index + 1
             idx = FileIndex(current_chunk_index, current_end_index if current_end_index < file_size else file_size)

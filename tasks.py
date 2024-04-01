@@ -15,4 +15,4 @@ def test(context):
 
 @task
 def start_profiler(context):
-    context.run('snakeviz 1brc_turan_0.profile')
+    context.run('snakeviz results/1brc_turan_0.profile')

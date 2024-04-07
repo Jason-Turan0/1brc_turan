@@ -14,5 +14,5 @@ setup(
     url='https://github.com/Jason-Turan0/1brc_turan',
     license=module_license,
     packages=find_packages(exclude=('tests', 'docs')),
-    install_requires=['invoke', 'snakeviz', 'pytest']
+    install_requires=['invoke', 'snakeviz', 'pytest', 'line_profiler', 'fastnumbers']
 )

@@ -160,3 +160,7 @@ cython_debug/
 #.idea/
 
 results
+
+.lprof
+.vscode/settings.json
+main.py.lprof

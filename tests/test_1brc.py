@@ -35,26 +35,27 @@ class Test1brc(unittest.TestCase):
         expected =[
             b'Babhnoul;27.3\r\nVigasio;14.3\r\nCalbuco;-24.5\r\nNeuss;39.0\r\n',
             b'Bolotnoye;-43.6\r\nSampu\xc3\xa9s;49.0\r\nKurumul;63.5\r\nSarasota Springs;-50.5\r\n',
-            b'Bolotnoye;82.6\r\nG\xc5\xabd\xc5\xabru;89.6'
+            b'Bolotnoye;82.6\r\nG\xc5\xabd\xc5\xabru;89.6\r\n'
         ]      
         self.assertEqual(expected, actual)
 
-    def test_chunks_2(self):    
-        expected = [
-            b'Babhnoul;27.3\r\nVigasio;14.3\r\n',
-            b'Calbuco;-24.5\r\nNeuss;39.0\r\n',
-            b'Bolotnoye;-43.6\r\nSampu\xc3\xa9s;49.0\r\n',
-            b'Kurumul;63.5\r\nSarasota Springs;-50.5\r\n',
-            b'Bolotnoye;82.6\r\nG\xc5\xabd\xc5\xabru;89.6',
-            b''
-        ]
+    def test_chunks_2(self):     
+        expected =[
+            b'Babhnoul;27.3\r\nVigasio;14.3\r\n', 
+            b'Calbuco;-24.5\r\nNeuss;39.0\r\nBolotnoye;-43.6\r\n', 
+            b'Sampu\xc3\xa9s;49.0\r\nKurumul;63.5\r\n', 
+            b'Sarasota Springs;-50.5\r\nBolotnoye;82.6\r\n', 
+            b'G\xc5\xabd\xc5\xabru;89.6\r\n', 
+            b'']
         actual = self.parseTestFile(6)
+        print('testchunk2')
+        print(actual)
         self.assertEqual(expected, actual)
 
     def test_chunks_3(self):    
         expected = [
             b'Babhnoul;27.3\r\nVigasio;14.3\r\nCalbuco;-24.5\r\nNeuss;39.0\r\nBolotnoye;-43.6\r\nSampu\xc3\xa9s;49.0\r\n', 
-            b'Kurumul;63.5\r\nSarasota Springs;-50.5\r\nBolotnoye;82.6\r\nG\xc5\xabd\xc5\xabru;89.6'
+            b'Kurumul;63.5\r\nSarasota Springs;-50.5\r\nBolotnoye;82.6\r\nG\xc5\xabd\xc5\xabru;89.6\r\n'
         ]    
         actual = self.parseTestFile(2)        
         self.assertEqual(expected, actual)                            
@@ -80,6 +81,7 @@ class Test1brc(unittest.TestCase):
             'Vigasio': 14.3,
             'Gūdūru': 89.6
         }
+        print(city_averages)
         self.assertEqual(expected_city_averages, city_averages)
         self.assertEqual(total_processed_count, 10)
 

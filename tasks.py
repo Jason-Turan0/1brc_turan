@@ -6,9 +6,13 @@ def run(context):
     context.run(f'python main.py')
 
 @task
+def run_pypy(context):
+    context.run(f'pypy\\pypy.exe main.py')
+
+
+@task
 def test(context):
     context.run(f'python -m unittest')
-
 
 @task
 def chunk(context):

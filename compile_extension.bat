@@ -1,0 +1,1 @@
+C:\MinGW\bin\gcc.exe C:\Projects\1brc_turan\myextension.c -shared -I "C:\Program Files\Python312\include" -L "C:\Program Files\Python312\libs" -o C:\Projects\1brc_turan\myextension.pyd

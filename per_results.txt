@@ -1,0 +1,49 @@
+(venv) C:\Projects\1brc_turan>invoke run
+16896738
+16896738
+Processed 1000000 Cities:8850
+total_processed_count 1000000
+Saved results to results/city_averages_1000000.json
+total secs 21.669162700069137
+Timer unit: 1e-07 s
+
+Total time: 5.33037 s
+File: C:\Projects\1brc_turan\main.py
+Function: process_line at line 38
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    38                                           @profile
+    39                                           def process_line(line, city_temps):
+    40   1000000   11540888.0     11.5     21.7      split = line.split(';')
+    41   1000000   10332869.0     10.3     19.4      if not split[0] in city_temps:
+    42      8850     100211.0     11.3      0.2          city_temps[split[0]] = {
+    43      8850      49917.0      5.6      0.1              'count': 0,
+    44      8850      47194.0      5.3      0.1              'sum': 0
+    45                                                   }
+    46   1000000   11512999.0     11.5     21.6      city_temps[split[0]]['count'] += 1
+    47   1000000   19719603.0     19.7     37.0      city_temps[split[0]]['sum'] += float(split[1])
+
+Total time: 18.1576 s
+File: C:\Projects\1brc_turan\main.py
+Function: parse_buffer at line 49
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    49                                           @profile
+    50                                           def parse_buffer(buffer, city_temps):
+    51     16500     648126.0     39.3      0.4      text_data = buffer.decode('utf-8')
+    52     16500    1488165.0     90.2      0.8      lines = text_data.splitlines()
+    53     16500     109920.0      6.7      0.1      processed_count =0
+    54   1015561    7394159.0      7.3      4.1      for line_index in range(len(lines) -1):
+    55    999061    6335506.0      6.3      3.5          line = lines[line_index]
+    56    999061  158092700.0    158.2     87.1          process_line(line, city_temps)
+    57    999061    6583379.0      6.6      3.6          processed_count += 1
+    58
+    59     16500     137794.0      8.4      0.1      last_line = lines[len(lines) -1]
+    60     16500     296460.0     18.0      0.2      if(buffer.endswith('\n'.encode('utf-8'))):
+    61       939     157599.0    167.8      0.1          process_line(last_line, city_temps)
+    62       939       6859.0      7.3      0.0          processed_count += 1
+    63       939      14685.0     15.6      0.0          return (None, processed_count)
+    64
+    65     15561     310409.0     19.9      0.2      return (last_line.encode('utf-8'), processed_count)

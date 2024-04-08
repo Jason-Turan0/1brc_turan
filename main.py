@@ -12,8 +12,8 @@ strtok = c_lib.strtok
 strtok.restype = ctypes.c_char_p
 strtok.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
 
-profile = line_profiler.LineProfiler()
-atexit.register(profile.print_stats)
+# profile = line_profiler.LineProfiler()
+# atexit.register(profile.print_stats)
 
 newline_1 = '\r'
 newline_2 = '\n'
@@ -47,9 +47,16 @@ def process_line(line, city_temps):
     city_temps[split[0]]['sum'] += float(split[1])    
 
 #@profile
-def parse_buffer(buffer, unprocessed_text, is_last_buffer, city_temps):
-    text_data = unprocessed_text + buffer.decode('utf-8')
-    lines = text_data.splitlines(True)
+# def process_line(line, city_temps):
+#     split = line.split(';')    
+#     city_temps[f'{split[0]}_count'] = city_temps.get(f'{split[0]}_count',0) + 1
+#     city_temps[f'{split[0]}_sum'] = city_temps.get(f'{split[0]}_sum', 0) + float(split[1])        
+
+
+#@profile
+def parse_buffer(buffer, city_temps):
+    text_data = buffer.decode('utf-8')
+    lines = text_data.splitlines()
     processed_count =0
     for line_index in range(len(lines) -1): 
         line = lines[line_index]        
@@ -57,12 +64,12 @@ def parse_buffer(buffer, unprocessed_text, is_last_buffer, city_temps):
         processed_count += 1
 
     last_line = lines[len(lines) -1]
-    if(last_line.endswith(newline_char)):
+    if(buffer.endswith('\n'.encode('utf-8'))):
         process_line(last_line, city_temps)       
         processed_count += 1
-        return ('', processed_count)
+        return (None, processed_count)
 
-    return (last_line, processed_count)
+    return (last_line.encode('utf-8'), processed_count)
 
 
 def parse_buffer_bad(buffer, unprocessed_text, is_last_buffer, city_temps):
@@ -106,6 +113,7 @@ def parse_buffer_bad(buffer, unprocessed_text, is_last_buffer, city_temps):
     return (unprocessed_text, parse_count)
 
 
+#@profile
 def process_line_new(line, city_temps):
     city = strtok(line, delimiter).decode('utf-8')
     temp = strtok(None, delimiter)
@@ -119,7 +127,7 @@ def process_line_new(line, city_temps):
     city_temps[city]['sum'] += fast_float(temp)
 
 #@profile
-def parse_buffer_new(buffer, is_last_buffer, city_temps):
+def parse_buffer_new(buffer, city_temps):
     c_csv_string = ctypes.c_char_p(buffer)
     line = strtok(c_csv_string, newline_char_encode)
     lines = []
@@ -153,7 +161,8 @@ def is_continuation_byte(byte):
    #print(f'{"{:03}".format(highest_bit)} {"{:08b}".format(highest_bit)}')    
    #print(are_equal)
    #return are_equal
-   
+
+#@profile
 def process_chunk(file_path, chunk_index, start_index, end_index, result_queue):
     city_temps = {}
     current_chunk_index = start_index
@@ -168,11 +177,9 @@ def process_chunk(file_path, chunk_index, start_index, end_index, result_queue):
             current_chunk_index += buffer_read_size
             while is_continuation_byte(buffer[-1]):                              
                buffer = buffer + file.read(1)
-               current_chunk_index += 1
-            is_last_buffer = current_chunk_index == end_index
+               current_chunk_index += 1            
             parse_result = parse_buffer_new(
-                buffer if unprocessed_buffer is None else unprocessed_buffer + buffer, 
-                is_last_buffer,
+                buffer if unprocessed_buffer is None else unprocessed_buffer + buffer,                 
                 city_temps) 
             unprocessed_buffer = parse_result[0]
             processed_count += parse_result[1]

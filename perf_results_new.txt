@@ -1,0 +1,54 @@
+(venv) C:\Projects\1brc_turan>invoke run
+16896738
+16896738
+Processed 1000000 Cities:8850
+total_processed_count 1000000
+Saved results to results/city_averages_1000000.json
+total secs 31.60647490003612
+Timer unit: 1e-07 s
+
+Total time: 9.75429 s
+File: C:\Projects\1brc_turan\main.py
+Function: process_line_new at line 109
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   109                                           @profile
+   110                                           def process_line_new(line, city_temps):
+   111   1000000   33493011.0     33.5     34.3      city = strtok(line, delimiter).decode('utf-8')
+   112   1000000   20292693.0     20.3     20.8      temp = strtok(None, delimiter)
+   113                                               #cities.append({'city': city, 'temp': float(temp)})
+   114   1000000   11424134.0     11.4     11.7      if not city in city_temps:
+   115      8850     111400.0     12.6      0.1          city_temps[city] = {
+   116      8850      54981.0      6.2      0.1              'count': 0,
+   117      8850      50845.0      5.7      0.1              'sum': 0
+   118                                                   }
+   119   1000000   12012635.0     12.0     12.3      city_temps[city]['count'] += 1
+   120   1000000   20103192.0     20.1     20.6      city_temps[city]['sum'] += fast_float(temp)
+
+Total time: 26.6308 s
+File: C:\Projects\1brc_turan\main.py
+Function: parse_buffer_new at line 122
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   122                                           @profile
+   123                                           def parse_buffer_new(buffer, city_temps):
+   124     16500     283305.0     17.2      0.1      c_csv_string = ctypes.c_char_p(buffer)
+   125     16500     454822.0     27.6      0.2      line = strtok(c_csv_string, newline_char_encode)
+   126     16500     126696.0      7.7      0.0      lines = []
+   127   1032061    7594611.0      7.4      2.9      while line:
+   128   1015561    6741455.0      6.6      2.5          lines.append(line)
+   129   1015561   20320831.0     20.0      7.6          line = strtok(None, newline_char_encode)
+   130     16500     104662.0      6.3      0.0      processed_count =0
+   131   1015561    7832425.0      7.7      2.9      for line in lines[:-1]:
+   132    999061  215141138.0    215.3     80.8          process_line_new(line, city_temps)
+   133    999061    6781054.0      6.8      2.5          processed_count += 1
+   134
+   135     16500     131101.0      7.9      0.0      last_line = lines[-1]
+   136     16500     311278.0     18.9      0.1      if(buffer.endswith('\n'.encode('utf-8'))):
+   137       939     204190.0    217.5      0.1          process_line_new(last_line, city_temps)       
+   138       939       7363.0      7.8      0.0          processed_count += 1
+   139       939      14563.0     15.5      0.0          return (None, processed_count)
+   140
+   141     15561     258378.0     16.6      0.1      return (last_line, processed_count)
